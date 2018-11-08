@@ -1,0 +1,231 @@
+﻿@model BookRentalProject.ViewModels.BookRentViewModel
+@using BookRentalProject.Utility
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+<div class="form-horizontal">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class="text-danger"})
+    @Html.HiddenFor(b=>b.BookId)
+    <h3>Create new Rent</h3>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control", id = "email" } })
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control", id = "title" } })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ISBN, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.ISBN, new { htmlAttributes = new { @class = "form-control", id = "isbn" } })
+            @Html.ValidationMessageFor(m => m.ISBN, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @{
+        List<SelectListItem> listToSelect = new List<SelectListItem>();
+        listToSelect.Add(new SelectListItem
+        {
+            Value = SD.OneMonthValue,
+            Text = SD.OneMonthText
+        });
+
+        listToSelect.Add(new SelectListItem
+        {
+            Value = SD.SixMonthValue,
+            Text = SD.SixMonthText
+        });
+
+    }
+    <div class="form-group">
+        @Html.LabelFor(m => m.RentalDuration, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.RentalDuration, listToSelect, new { @class = "form-control", id = "ddlRentalDuration" })
+            @Html.ValidationMessageFor(m => m.RentalDuration, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div id="toUnvisible" style="display:none;">
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Label(" ", new { @class = "form-control", id = "lblFirstName", style = "width:350px;" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Birthday, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Label(" ", new { @class = "form-control", id = "lblBirthday", style = "width:350px;" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.RentalPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Label(" ", new { @class = "form-control", id = "lblRentalPrice", style = "width:350px;" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Availibility, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Label(" ", new { @class = "form-control", id = "lblAvailibility", style = "width:350px;" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" class="btn btn-sm btn-primary" id="btnCheckAvailibility" value="Check Availibility" />
+            <input type="submit" class="btn btn-sm btn-success" id="btnSubmit" value="Reserve" style="display:none;" />
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function(){
+            var customers = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('Email'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/UsersApi?type=email&query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#email').typeahead({ minLength: 3, highlight: true }, {
+                name: 'customers',
+                display: 'Email',
+                source: customers
+            });
+
+
+
+            var bookTitles = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('Title'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/BooksApi?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#title').typeahead({ minLength: 3, highlight: true }, {
+                name: 'bookTitles',
+                display: 'Title',
+                source: bookTitles
+            });
+        
+        
+        });
+
+        $('#btnCheckAvailibility').click(function () {
+            var email = document.getElementById("email").value;
+            var isbn = document.getElementById("isbn").value;
+            var rentalDuration = document.getElementById("ddlRentalDuration").value;
+
+            $.ajax({
+                url: '/api/BooksApi?type=avail&isbn=' + isbn,
+                type: 'GET',
+                dataType: 'json',
+                success(data, textStatus, xhr) {
+                    $('#lblAvailibility').text(data);
+                    if (data > 0) {
+                        document.getElementById("btnSubmit").style.display = '';
+                    } else {
+                        document.getElementById("btnSubmit").style.display = '';
+                        document.getElementById("btnSubmit").display = true;
+                        document.getElementById("btnSubmit").value = 'Not available';
+                        document.getElementById("btnSubmit").classList.remove = 'success';
+                        document.getElementById("btnSubmit").classList.add = 'danger';
+
+                    }
+
+                },
+                error(xhr, textStatus, errorTwrown) {
+
+                }
+                
+
+
+            });
+
+            $.ajax({
+                url: '/api/BooksApi?type=price&isbn=' + isbn + '&email=' + email + '&rentalDuration=' + rentalDuration,
+                type: 'GET',
+                dataType: 'json',
+                success(data, textStatus, xhr) {
+                    $('#lblRentalPrice').text(data);   
+                    
+
+                },
+                error(xhr, textStatus, errorTwrown) {
+
+                }
+
+
+
+            });
+
+            $.ajax({
+                url: '/api/UsersApi?type=name&query=' + email,
+                type: 'GET',
+                dataType: 'json',
+                success(data, textStatus, xhr) {
+                    var fields = data.split(';');
+                    var name = fields[0];
+                    $('#lblFirstName').text(name);
+
+                    document.getElementById("btnCheckAvailibility").style.display = 'none';
+                    document.getElementById("toUnvisible").style.display = '';
+
+
+                    var birthday = fields[1].split(' ');
+                    $('#lblBirthday').text(birthday[0]);
+
+                    
+
+                   
+                    
+
+                },
+                error(xhr, textStatus, errorTwrown) {
+
+                }
+
+
+
+            });
+
+
+        });
+
+    </script>
+    
+    }

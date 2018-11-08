@@ -1,0 +1,6 @@
+﻿@model BookRentalProject.Models.IndividualButtonModel
+
+
+<a type="button" class="btn btn-sm btn-@Model.ButtonType" href="@Url.Action(Model.ActionName)@Model.ActionParametars">
+    <span class="glyphicon glyphicon-@Model.Glyphc"></span>
+</a>

@@ -1,0 +1,24 @@
+﻿.image-book{
+    padding-top:50px;
+
+}
+
+.book-title-author-description{
+    text-align:justify;
+    padding-top:30px;
+
+}
+
+.book-title-author{
+    border-bottom:1px solid #b1b1b1;
+}
+
+.bookrent-price {
+    border-left: 1px solid #b1b1b1;
+    padding-top:50px;
+}
+
+.bookdetail-heading{
+    padding-top:30px;
+    color:#0082ff;
+}

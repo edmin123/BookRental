@@ -1,0 +1,25 @@
+﻿@model BookRentalProject.ViewModels.ThumbnailBoxViewModel
+@{
+    ViewBag.Title = "_ThumbnailPartial";
+}
+
+@if (Model.Thumbnails != null)
+{
+    foreach(var item in Model.Thumbnails)
+    {
+        <div class="col-sm-3 col-xs-6">
+            <div class="thumbnail">
+                <div class="thumbnail-image-container">
+                    <a href="@item.Link"><img class="img-thumbnail" src="@item.ImageUrl" alt="" style="width:100%;height:auto" /></a>
+                </div>
+                <div class="caption">
+                    <a href="@item.Link"><h3>@item.Title</h3></a>
+                    @Html.Raw(@item.Description)
+                </div>
+
+            </div>
+        </div>
+
+
+    }
+}

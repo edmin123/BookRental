@@ -1,0 +1,103 @@
+﻿@model BookRentalProject.ViewModels.BookRentViewModel
+@using BookRentalProject.Utility
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="form-horizontal">
+    <h3>BookRent Details</h3>
+    <hr />
+    <div class="form-border">
+        <div class="row">
+            <div class="col-sm-10">
+                <fieldset disabled>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ISBN, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(m => m.ISBN, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Title, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.RentalPrice, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(m => m.RentalPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Birthday, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Birthday, "{0:MM dd yyyy}", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.StartDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.StartDate, "{0:MM dd yyyy}", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ActualEndDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.ActualEndDate, "{0:MM dd yyyy}", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ScheduledEndDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.ScheduledEndDate, "{0:MM dd yyyy}", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Status, htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Status, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    @if (Model.Status.ToLower().Equals(SD.ClosedToLower))
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.AdditionalCharge, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.EditorFor(m => m.AdditionalCharge, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    }
+                </fieldset>
+
+            </div>
+            <div class="col-sm-2">
+                <div>
+                    <img src="@Model.ImageUrl" alt="" class="img-thumbnail" style="width:100%;height:auto" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<p>@Html.Partial("_BackToListPartial")</p>

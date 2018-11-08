@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BookRentalProject.Models.Genre>
+    @using BookRentalProject.Models
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p>
+@Html.Partial("_CreateNewButtonPartial")
+</p>
+<table class="table table-condensed table-hover">
+    <tr class="table-header">
+        <th>@Html.DisplayNameFor(m=>m.Name)</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(m=>item.Name)</td>
+            <td>@Html.Partial("_TableButtonPartial",new IndividualButtonModel { GenreId=item.Id})</td>
+        </tr>
+
+    }
+
+
+</table>

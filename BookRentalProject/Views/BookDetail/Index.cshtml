@@ -1,0 +1,141 @@
+﻿@model BookRentalProject.ViewModels.BookRentViewModel
+@using BookRentalProject.Utility
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@using (Html.BeginForm("Reserve", "BookRent"))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.BookId)
+    <div class="row">
+        <div class="col-sm-3 col-xs-6 image-book">
+            @*Book Image*@
+            <img src="@Model.ImageUrl" alt="" class="img-thumbnail" style="width:100%;height:auto;" />
+
+        </div>
+
+        <div class="col-sm-6 col-xs-8 book-title-author-description">
+            @*Book Title, Author, Description*@
+            <div class="book-title-author">
+                <h3><b>@Model.Title</b></h3>
+                <h5>by @Model.Author</h5>
+            </div>
+            <div>
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+
+        <div class="col-sm-3 col-xs-12 bookrent-price">
+            @*BookRent Price, Details*@
+            @{
+                List<SelectListItem> listToSelect = new List<SelectListItem>();
+                listToSelect.Add(new SelectListItem
+                {
+                    Value = SD.OneMonthValue,
+                    Text = SD.OneMonthText
+                });
+                listToSelect.Add(new SelectListItem
+                {
+                    Value = SD.SixMonthValue,
+                    Text = SD.SixMonthText
+                });
+
+            }
+
+            @if (Model.rentalPriceOneMonth != 0 && Model.rentalPriceSixMonth != 0)
+            {
+                
+                <div class="form-control" style="height:350px;">
+                    <div class="input-group" style="height:30px;">
+                        <label id="lblMSRP">Price:</label><br />
+                        <label>$@(Model.Price)</label>
+                    </div>
+                    <div class="input-group" style="height:90px;">
+                        <label id="lblMSRP">Rental Price:</label><br />
+                        <label>One Month: $@(Model.rentalPriceOneMonth)</label><br />
+                        <label>Six Months: $@(Model.rentalPriceSixMonth)</label><br />
+                    </div>
+
+
+                    <div class="form-group">
+                       <label>Rental Duration:</label><br />
+                        @Html.DropDownListFor(m => m.RentalDuration, listToSelect, new { @class = "form-control" })
+
+                    </div>
+                    <br />
+
+                    @if (Model.Availibility > 0)
+                    {
+                        <button type="submit" class="btn btn-success" value="Reserve">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Reserve
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-danger disabled"  value="Unavailable">
+                            <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;Unavailable
+                        </button>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="form-control" style="height:350px;">
+                    <div class="input-group" style="height:30px;">
+                        <label id="lblMSRP">Price:</label><br />
+                        <label>$@(Model.Price)</label><br />
+                    </div>
+                    @if (User.IsInRole(SD.AdminUserRole) && Model.Availibility > 0)
+                    {
+
+                        @Html.ActionLink("Create Rental", "Create", "BookRent", new { title = Model.Title, isbn = Model.ISBN }, new { @class = "btn btn-primary" })
+
+                    }
+                    else
+                    {
+
+                        if (User.IsInRole(SD.AdminUserRole) && Model.Availibility == 0)
+                        {
+                            <button type="submit" class="btn btn-danger disabled"  value="Unavailable">
+                                <span class="glyphicon glyphicon-thumbs-down"></span>&nbsp;Unavailable
+                            </button>
+                        }
+                        else
+                        {
+                            <span>Please <a href="@Url.Action("Login","Account")">Log In</a> to see Book details!</span>
+                        }
+                    }
+                </div>
+            }
+
+
+            <h3 class="bookdetail-heading">Book Details</h3>
+            <hr />
+            <dl>
+                <dt>@Html.DisplayNameFor(m => m.ISBN)</dt>
+                <dd>@Html.DisplayFor(m => m.ISBN)</dd>
+            </dl>
+            <dl>
+                <dt>@Html.DisplayNameFor(m => m.Title)</dt>
+                <dd>@Html.DisplayFor(m => m.Title)</dd>
+            </dl>
+            <dl>
+                <dt>@Html.DisplayNameFor(m => m.Author)</dt>
+                <dd>@Html.DisplayFor(m => m.Author)</dd>
+            </dl>
+            <dl>
+                <dt>@Html.DisplayNameFor(m => m.Price)</dt>
+                <dd>@Html.DisplayFor(m => m.Price)</dd>
+            </dl>
+            <dl>
+                <dt>@Html.DisplayNameFor(m => m.ProductDimensions)</dt>
+                <dd>@Html.DisplayFor(m => m.ProductDimensions)</dd>
+            </dl>
+
+        </div>
+
+
+    </div>
+}

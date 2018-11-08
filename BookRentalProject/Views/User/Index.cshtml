@@ -1,0 +1,70 @@
+﻿@model IEnumerable<BookRentalProject.ViewModels.UserViewModel>
+    @using BookRentalProject.Models
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>Users Portal</h3>
+<hr />
+<table class="table table-hover table-condensed">
+    <tr class="table-header">
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Disable)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </th>
+
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Disable)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthday)
+            </td>
+
+
+            <td>
+                @Html.Partial("_TableButtonPartial", new IndividualButtonModel { UserId = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
